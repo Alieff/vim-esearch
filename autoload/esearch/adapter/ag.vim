@@ -28,11 +28,11 @@ fu! esearch#adapter#ag#cmd(pattern, dir, escape, ...) abort
   if has('win32')
     return g:esearch#adapter#ag#bin.' '.r.' '.c.' '.w.' --nogroup --nocolor --column ' .
           \ g:esearch#adapter#ag#options . ' -- ' .
-          \ a:escape(a:pattern)  . ' ' . fnameescape(a:dir)
+          \ a:escape(a:pattern)  . " '" . fnameescape(a:dir) ."'"
   else
     return g:esearch#adapter#ag#bin.' '.r.' '.c.' '.w.' --nogroup --nocolor --column ' .
           \ g:esearch#adapter#ag#options . ' -- ' .
-          \ a:escape(a:pattern)  . " '" . fnameescape(a:dir) ."'"
+          \ a:escape(a:pattern)  . ' ' . fnameescape(a:dir)
   endif
 endfu
 
