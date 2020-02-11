@@ -25,9 +25,15 @@ fu! esearch#adapter#ag#cmd(pattern, dir, escape, ...) abort
   let r = options.parametrize('regex')
   let c = options.parametrize('case')
   let w = options.parametrize('word')
-  return g:esearch#adapter#ag#bin.' '.r.' '.c.' '.w.' --nogroup --nocolor --column ' .
-        \ g:esearch#adapter#ag#options . ' -- ' .
-        \ a:escape(a:pattern)  . ' ' . fnameescape(a:dir)
+  if has('win32')
+    return g:esearch#adapter#ag#bin.' '.r.' '.c.' '.w.' --nogroup --nocolor --column ' .
+          \ g:esearch#adapter#ag#options . ' -- ' .
+          \ a:escape(a:pattern)  . ' ' . fnameescape(a:dir)
+  else
+    return g:esearch#adapter#ag#bin.' '.r.' '.c.' '.w.' --nogroup --nocolor --column ' .
+          \ g:esearch#adapter#ag#options . ' -- ' .
+          \ a:escape(a:pattern)  . " '" . fnameescape(a:dir) ."'"
+  endif
 endfu
 
 fu! esearch#adapter#ag#is_broken_result(line) abort

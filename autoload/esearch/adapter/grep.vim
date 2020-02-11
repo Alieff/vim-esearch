@@ -32,10 +32,16 @@ fu! esearch#adapter#grep#cmd(pattern, dir, escape, ...) abort
   let w = options.parametrize('word')
   " -r: recursive, no follow symbolic links
   " -I: Process a binary file as if it did not contain matching data
+  if has('win32')
+    return g:esearch#adapter#grep#bin.' '.r.' '.c.' '.w.' -r --line-number --exclude-dir=.{git,svn,hg} ' .
+          \ g:esearch#adapter#grep#options . ' -- ' .
+          \ a:escape(a:pattern)  . " '" . fnameescape(a:dir) . "'"
+  else
+    return g:esearch#adapter#grep#bin.' '.r.' '.c.' '.w.' -r --line-number --exclude-dir=.{git,svn,hg} ' .
+          \ g:esearch#adapter#grep#options . ' -- ' .
+          \ a:escape(a:pattern)  . ' ' . fnameescape(a:dir)
+  endif
 
-  return g:esearch#adapter#grep#bin.' '.r.' '.c.' '.w.' -r --line-number --exclude-dir=.{git,svn,hg} ' .
-        \ g:esearch#adapter#grep#options . ' -- ' .
-        \ a:escape(a:pattern)  . ' ' . fnameescape(a:dir)
 endfu
 
 fu! esearch#adapter#grep#is_broken_result(line) abort

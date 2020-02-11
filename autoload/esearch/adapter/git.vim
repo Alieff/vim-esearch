@@ -32,9 +32,16 @@ fu! esearch#adapter#git#cmd(pattern, dir, escape, ...) abort
   let w = options.parametrize('word')
   " -H - show filenames
   " -I - don't search binary files
-  return g:esearch#adapter#git#bin.' -C '.fnameescape(a:dir).' --no-pager grep '.r.' '.c.' '.w.' -H -I --no-color --line-number ' .
-        \ g:esearch#adapter#git#options . ' -- ' .
-        \ a:escape(a:pattern)
+  if has('win32')
+    let command = g:esearch#adapter#git#bin." -C '".a:dir."' --no-pager grep ".r.' '.c.' '.w.' -H -I --no-color --line-number ' .
+          \ g:esearch#adapter#git#options . ' -- ' .
+          \ a:escape(a:pattern)
+  else
+    let command = g:esearch#adapter#git#bin." -C ".fnameescape(a:dir)." --no-pager grep ".r.' '.c.' '.w.' -H -I --no-color --line-number ' .
+          \ g:esearch#adapter#git#options . ' -- ' .
+          \ a:escape(a:pattern)
+  endif
+  return command
 
 endfu
 
